@@ -10,3 +10,19 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Idea files
+.idea/*
+
+# Ignore temp files
+*~
+*.swp
+.DS_Store
+
+# Like to make copies of original before modifying?  Name it with .OLD or .BACKUP extension
+**/*.OLD
+**/*.BACKUP
+
+# Ignore other project items
+bin/
+gorm.db
