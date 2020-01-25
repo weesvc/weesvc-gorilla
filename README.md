@@ -1,6 +1,20 @@
 # WeeSVC Gorilla
-Implementation of the WeeSVC application using [Go](https://golang.org/) and the [Gorilla Mux](http://www.gorillatoolkit.org/pkg/mux) 
+Implementation of the WeeSVC application using [Go](https://golang.org/) and the [Gorilla Mux](https://www.gorillatoolkit.org/pkg/mux) 
 web toolkit.
+
+## Ingredients
+The following external libraries were *directly* utilized in this project.
+
+| Package     | Link                                   | Description                                                             |
+| ---         | ---                                    | ---                                                                     |
+| Go          | https://golang.org/                    | Well...it's obvious isn't it?!                                          |
+| Gorilla Mux | https://www.gorillatoolkit.org/pkg/mux | Web Toolkit providing HTTP server and routing                           |
+| GORM        | https://gorm.io/                       | Database ORM                                                            |
+| SQLite      | https://www.sqlite.org/index.html      | The lightweight database                                                |
+| Cobra       | https://github.com/spf13/cobra         | Command-line library                                                    |
+| Viper       | https://github.com/spf13/viper         | Awesome configuration library for settings                              |
+| Logrus      | https://github.com/sirupsen/logrus     | Logging abstraction for the Go standard library                         |
+| UUID        | https://github.com/google/uuid         | Implementation for generation of universally unique identifiers (UUIDs) |
 
 ## Build
 Builds are performed using the `Makefile` provided in the project root.  
