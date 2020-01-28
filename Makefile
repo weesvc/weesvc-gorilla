@@ -57,7 +57,7 @@ deps:
 
 ## test: Runs unit tests for the application.
 test: deps
-	go test -v ./...
+	go test -cover ./...
 
 ## imports: Organizes imports within the codebase.
 imports:
