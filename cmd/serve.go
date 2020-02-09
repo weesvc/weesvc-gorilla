@@ -22,7 +22,6 @@ func serveAPI(ctx context.Context, api *api.API) {
 	cors := handlers.CORS(
 		handlers.AllowedOrigins([]string{"*"}),
 		handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "OPTIONS"}),
-		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
 	)
 
 	router := mux.NewRouter()

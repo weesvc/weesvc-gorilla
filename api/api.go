@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/NYTimes/gziphandler"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
@@ -45,7 +44,7 @@ func New(a *app.App) (api *API, err error) {
 
 // Init is where we define the routes our API will support.
 func (a *API) Init(r *mux.Router) {
-	r.Handle("/hello", gziphandler.GzipHandler(a.handler(a.helloHandler)))
+	r.Handle("/hello", a.handler(a.helloHandler))
 
 	// place methods
 	placesRouter := r.PathPrefix("/places").Subrouter()
@@ -134,16 +133,5 @@ func (a *API) helloHandler(ctx *app.Context, w http.ResponseWriter, r *http.Requ
 
 func (a *API) addressForRequest(r *http.Request) string {
 	addr := r.RemoteAddr
-	if a.Config.ProxyCount > 0 {
-		h := r.Header.Get("X-Forwarded-For")
-		if h != "" {
-			clients := strings.Split(h, ",")
-			if a.Config.ProxyCount > len(clients) {
-				addr = clients[0]
-			} else {
-				addr = clients[len(clients)-a.Config.ProxyCount]
-			}
-		}
-	}
 	return addr[:strings.LastIndex(addr, ":")]
 }
