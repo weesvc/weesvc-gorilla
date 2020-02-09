@@ -17,8 +17,7 @@ var createPlacesMigration0001 = &Migration{
 				latitude REAL,
 				longitude REAL,
 				created_at TIMESTAMP NOT NULL,
-				updated_at TIMESTAMP NOT NULL,
-				deleted_at TIMESTAMP
+				updated_at TIMESTAMP NOT NULL
 			);
 		`
 		err := db.Exec(createPlacesSQL).Error
