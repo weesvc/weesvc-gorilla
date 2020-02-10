@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 
@@ -75,7 +76,7 @@ func (a *API) getPlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.Requ
 	id := getIDFromRequest(r)
 	place, err := ctx.GetPlaceByID(id)
 	if err != nil {
-		return err
+		return handleError(w, r, err)
 	}
 
 	data, err := json.Marshal(place)
@@ -110,8 +111,8 @@ func (a *API) updatePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.R
 	}
 
 	existingPlace, err := ctx.GetPlaceByID(id)
-	if err != nil || existingPlace == nil {
-		return err
+	if err != nil {
+		return handleError(w, r, err)
 	}
 
 	if input.Name != nil {
@@ -146,7 +147,7 @@ func (a *API) deletePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.R
 	err := ctx.DeletePlaceByID(id)
 
 	if err != nil {
-		return err
+		return handleError(w, r, err)
 	}
 
 	return &app.UserError{StatusCode: http.StatusOK, Message: "removed"}
@@ -162,4 +163,12 @@ func getIDFromRequest(r *http.Request) uint {
 	}
 
 	return uint(intID)
+}
+
+func handleError(w http.ResponseWriter, r *http.Request, err error) error {
+	if strings.Contains(err.Error(), "record not found") {
+		http.NotFound(w, r)
+		return nil
+	}
+	return err
 }
