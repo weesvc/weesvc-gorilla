@@ -77,13 +77,12 @@ func (a *API) handler(f func(*app.Context, http.ResponseWriter, *http.Request) e
 			}
 			duration := time.Since(beginTime)
 
-			logger := ctx.Logger.WithFields(logrus.Fields{
+			ctx.Logger.WithFields(logrus.Fields{
 				"duration":       duration,
 				"status_code":    statusCode,
 				"remote_address": ctx.RemoteAddress,
 				"trace_id":       ctx.TraceID,
-			})
-			logger.Info(r.Method + " " + r.URL.RequestURI())
+			}).Info(r.Method + " " + r.URL.RequestURI())
 		}()
 
 		defer func() {
