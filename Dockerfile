@@ -3,7 +3,7 @@ FROM golang:1.13-alpine AS build
 ARG build_version=0.0.1-SNAPSHOT
 ARG build_revision=unknown
 RUN apk --no-cache add build-base git
-ADD . /weesvc-gorilla/
+COPY . /weesvc-gorilla/
 WORKDIR /weesvc-gorilla
 RUN make BUILD_VERSION=$build_version BUILD_REVISION=$build_revision setup build
 
