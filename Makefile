@@ -101,7 +101,7 @@ build-all: deps imports fmt lint vet
 	mkdir -v -p $(CURDIR)/artifacts
 	gox -verbose \
 	    -os "$(BUILD_OS)" -arch "$(BUILD_ARCH)" \
-	    -ldflags "$(LINKER_FLAGS)" \
+	    -ldflags $(LINKER_FLAGS) \
 	    -output "$(CURDIR)/artifacts/{{.OS}}_{{.Arch}}/$(PROJECT_NAME)" .
 	mkdir -v -p $(CURDIR)/bin
 	cp -v -f \
