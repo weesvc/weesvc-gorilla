@@ -1,0 +1,6 @@
+# The following should be excluded from generated Docker images
+.dockerignore
+.git/
+.gitignore
+.idea/
+Dockerfile

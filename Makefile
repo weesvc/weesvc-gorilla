@@ -53,7 +53,8 @@ clean-vendor:
 
 ## deps: Verifies and cleans up module dependencies.
 deps:
-	go mod tidy -v
+	echo "Tidying modules..."
+	go mod tidy -go=1.17
 
 ## test: Runs unit tests for the application.
 test: deps
@@ -82,11 +83,9 @@ vet:
 ## setup: Downloads all required tooling for building the application.
 setup:
 	echo "Installing tools..."
-	curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 	go get golang.org/x/tools/cmd/goimports
 	go get -u golang.org/x/lint/golint
-	go get github.com/axw/gocov/gocov
-	go get github.com/mitchellh/gox
+
 
 ## build: Build the application.
 build: deps imports fmt lint vet

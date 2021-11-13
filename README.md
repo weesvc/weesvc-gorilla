@@ -20,7 +20,7 @@ The following external libraries were *directly* utilized in this project.
 Builds are performed using the `Makefile` provided in the project root.  
 
 #### CLI
-In order to build the CLI, you will need to have Go (1.13+) installed on your system.
+In order to build the CLI, you will need to have Go (1.17+) installed on your system.
 
 The default target for the `Makefile` will perform several tasks: 
 * organize imports using `goimports`

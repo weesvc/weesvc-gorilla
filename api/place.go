@@ -30,9 +30,9 @@ func (a *API) getPlaces(ctx *app.Context, w http.ResponseWriter, r *http.Request
 
 type createPlaceInput struct {
 	Name        string  `json:"name"`
-	Description string  `json:"desc"`
-	Latitude    float64 `json:"lat"`
-	Longitude   float64 `json:"lon"`
+	Description string  `json:"description"`
+	Latitude    float64 `json:"latitude"`
+	Longitude   float64 `json:"longitude"`
 }
 
 type createPlaceResponse struct {
@@ -90,9 +90,9 @@ func (a *API) getPlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.Requ
 
 type updatePlaceInput struct {
 	Name        *string  `json:"name"`
-	Description *string  `json:"desc"`
-	Latitude    *float64 `json:"lat"`
-	Longitude   *float64 `json:"lon"`
+	Description *string  `json:"description"`
+	Latitude    *float64 `json:"latitude"`
+	Longitude   *float64 `json:"longitude"`
 }
 
 func (a *API) updatePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.Request) error {
