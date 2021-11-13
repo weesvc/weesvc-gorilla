@@ -134,3 +134,11 @@ Date: Sat, 25 Jan 2020 18:15:16 GMT
     "message": "removed"
 }
 ```
+
+## API Compliance
+A core requirement for all _WeeSVC_ implementations is to implement the same API which are utilized for benchmark comparisons. To ensure compliance with the required API, [k6](https://k6.io/) is utilized within the [Workbench](https://github.com/weesvc/workbench) project.
+
+To be a valid service, the following command MUST pass at 100%:
+```
+k6 run -e PORT=9092 https://raw.githubusercontent.com/weesvc/workbench/main/scripts/api-compliance.js
+```
