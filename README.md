@@ -57,7 +57,7 @@ i.e. the path for the directory containing this README.
 
 Execute a `GET` command to retrieve the available _places_ from the database.
 ```shell script
-$ http GET localhost:9092/api/places
+$ http GET :9092/api/places
 
 HTTP/1.1 200 OK
 Content-Length: 2
@@ -68,7 +68,7 @@ Date: Sat, 25 Jan 2020 05:33:57 GMT
 ```
 Add a _place_ into the database using a `POST` command.
 ```shell script
-$ http POST localhost:9092/api/places name=NISC desc="NISC Lake St. Louis Office" lat:=38.7839 lon:=90.7878
+$ http POST :9092/api/places name=NISC description="NISC Lake St. Louis Office" latitude:=38.7839 longitude:=90.7878
 
 HTTP/1.1 200 OK
 Content-Length: 8
@@ -81,7 +81,7 @@ Date: Sat, 25 Jan 2020 05:34:08 GMT
 ```
 Run the `GET` command again to retrieve _places_ which now include your newly added _place_!
 ```shell script
-$ http GET localhost:9092/api/places/1
+$ http GET :9092/api/places/1
 
 HTTP/1.1 200 OK
 Content-Length: 217
@@ -90,20 +90,19 @@ Date: Sat, 25 Jan 2020 05:34:18 GMT
 
 [
     {
-        "CreatedAt": "2020-01-24T23:34:08.491999-06:00",
-        "DeletedAt": null,
-        "Description": "NISC Lake St. Louis Office",
-        "ID": 1,
-        "Latitude": 38.7839,
-        "Longitude": 90.7878,
-        "Name": "NISC",
-        "UpdatedAt": "2020-01-24T23:34:08.491999-06:00"
+        "created_at": "2020-01-24T23:34:08.491999-06:00",
+        "description": "NISC Lake St. Louis Office",
+        "id": 1,
+        "latitude": 38.7839,
+        "longitude": 90.7878,
+        "name": "NISC",
+        "updated_at": "2020-01-24T23:34:08.491999-06:00"
     }
 ]
 ```
 Use the `PATCH` command to update a specific value.  For example we'll update the `Description` as follows:
 ```shell script
-$ http PATCH localhost:9092/api/places/1 desc="Lake St. Louis"
+$ http PATCH :9092/api/places/1 description="Lake St. Louis"
 
 HTTP/1.1 200 OK
 Content-Length: 203
@@ -111,19 +110,18 @@ Content-Type: application/json
 Date: Sat, 25 Jan 2020 18:13:13 GMT
 
 {
-    "CreatedAt": "2020-01-24T23:34:08.491999-06:00",
-    "DeletedAt": null,
-    "Description": "Lake St. Louis",
-    "ID": 1,
-    "Latitude": 38.7839,
-    "Longitude": 90.7878,
-    "Name": "NISC",
-    "UpdatedAt": "2020-01-25T12:13:13.351201-06:00"
+    "created_at": "2020-01-24T23:34:08.491999-06:00",
+    "description": "Lake St. Louis",
+    "id": 1,
+    "latitude": 38.7839,
+    "longitude": 90.7878,
+    "name": "NISC",
+    "updated_at": "2020-01-25T12:13:13.351201-06:00"
 }
 ```
 This returns the newly "patched" version of the _place_.  Next we'll remove the row using the `DELETE` method.
 ```shell script
-$ http DELETE localhost:9092/api/places/1
+$ http DELETE :9092/api/places/1
 
 HTTP/1.1 200 OK
 Content-Length: 21
