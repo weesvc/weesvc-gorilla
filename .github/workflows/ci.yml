@@ -16,5 +16,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: '>=1.17.0'
+      - name: Setup build dependencies
+        run: make setup
       - name: Build application
         run: make build
