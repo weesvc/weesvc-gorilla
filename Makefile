@@ -83,7 +83,7 @@ vet:
 ## setup: Downloads all required tooling for building the application.
 setup:
 	echo "Installing tools..."
-	go get golang.org/x/tools/cmd/goimports
+	go install golang.org/x/tools/cmd/goimports@latest
 	go get -u golang.org/x/lint/golint
 
 
