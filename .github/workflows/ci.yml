@@ -35,3 +35,25 @@ jobs:
           go-version: '>=1.17.0'
       - name: Run unit tests
         run: go test -v -cover -race ./...
+
+  check-compliance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Go(lang)
+        uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - name: Build server binary
+        run: |
+          go version
+          make build-only
+      - name: Install k6
+        run: |
+          curl https://github.com/grafana/k6/releases/download/v0.37.0/k6-v0.37.0-linux-amd64.tar.gz -L | tar xvz --strip-components 1
+      - name: k6 Compliance
+        run: |
+          echo "DatabaseURI: "${GITHUB_WORKSPACE}/gorm.db"" > config.yaml
+          bin/weesvc migrate; bin/weesvc serve &
+          ./k6 run -e PORT=9092 https://raw.githubusercontent.com/weesvc/workbench/main/scripts/api-compliance.js
