@@ -2,12 +2,14 @@ name: CI
 
 on:
   push:
-  pull_request:
     branches:
       - main
+    tags:
+      - v*
+  pull_request:
 
 jobs:
-  build:
+  check-modules:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -16,7 +18,20 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: '>=1.17.0'
-      - name: Setup build dependencies
-        run: make setup
-      - name: Build application
-        run: make build
+      - name: Check module dependencies
+        run: |
+          go version
+          test -z "$(go mod tidy && git status go.* --porcelain)"
+          go mod verify
+
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Install Go(lang)
+        uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - name: Run unit tests
+        run: go test -v -cover -race ./...

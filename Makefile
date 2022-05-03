@@ -88,7 +88,10 @@ setup:
 
 
 ## build: Build the application.
-build: deps imports fmt lint vet
+build: deps imports fmt lint vet build-only
+
+## build-only: Build without prerequisite steps
+build-only:
 	echo "Building '${PROJECT_NAME}'..."
 	mkdir -v -p $(CURDIR)/bin
 	go build -v \
