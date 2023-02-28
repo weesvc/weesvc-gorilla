@@ -54,7 +54,7 @@ clean-vendor:
 ## deps: Verifies and cleans up module dependencies.
 deps:
 	echo "Tidying modules..."
-	go mod tidy -go=1.17
+	go mod tidy
 
 ## test: Runs unit tests for the application.
 test: deps
