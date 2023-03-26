@@ -2,7 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -43,7 +43,7 @@ func (a *API) createPlace(ctx *app.Context, w http.ResponseWriter, r *http.Reque
 	var input createPlaceInput
 
 	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
 	}
@@ -101,7 +101,7 @@ func (a *API) updatePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.R
 	var input updatePlaceInput
 
 	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
 	}

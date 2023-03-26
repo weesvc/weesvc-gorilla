@@ -12,7 +12,10 @@ var rootCmd = &cobra.Command{
 	Use:   "weesvc",
 	Short: "WeeService Application",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Usage()
+		if err := cmd.Usage(); err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
 	},
 }
 
@@ -34,7 +37,10 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is config.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
 
-	viper.BindPFlag("Verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+	if err := viper.BindPFlag("Verbose", rootCmd.PersistentFlags().Lookup("verbose")); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
 
 func initConfig() {

@@ -1,5 +1,5 @@
 # multi-stage build for GoLang tiny deployment
-FROM golang:1.19-alpine AS build
+FROM golang:1.20-alpine AS build
 ARG build_version=0.0.1-SNAPSHOT
 ARG build_revision=unknown
 RUN apk --no-cache add build-base git

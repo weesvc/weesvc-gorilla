@@ -73,7 +73,7 @@ fmt:
 ## lint: Reports any stylistic mistakes on the codebase.
 lint:
 	echo "Linting code..."
-	golint ./...
+	golangci-lint run
 
 ## vet: Searches for any suspicious constructs within the codebase.
 vet:
