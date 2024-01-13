@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Go(lang)
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.20.x
+          go-version: 1.21.x
       - name: Check module dependencies
         run: |
           go version
@@ -28,11 +28,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Go(lang)
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.20.x
+          go-version: 1.21.x
       - name: Run unit tests
         run: go test -v -cover -race ./...
 
@@ -40,18 +40,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Go(lang)
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.20.x
+          go-version: 1.21.x
       - name: Build server binary
         run: |
           go version
           make build-only
       - name: Install k6
         run: |
-          curl https://github.com/grafana/k6/releases/download/v0.43.1/k6-v0.43.1-linux-amd64.tar.gz -L | tar xvz --strip-components 1
+          curl https://github.com/grafana/k6/releases/download/v0.48.0/k6-v0.48.0-linux-amd64.tar.gz -L | tar xvz --strip-components 1
       - name: k6 Compliance
         run: |
           echo "DatabaseURI: "${GITHUB_WORKSPACE}/gorm.db"" > config.yaml

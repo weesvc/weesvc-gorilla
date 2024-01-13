@@ -33,7 +33,7 @@ The default target for the `Makefile` will perform several tasks:
 
 Once built, you can **migrate** the database scripts and run the application:
 ```shell script
-$ bin/weesvc migrate; bin/weesvc serve
+bin/weesvc migrate; bin/weesvc serve
 ```
 #### Docker
 For those who do not have Go available, [Docker](https://hub.docker.com/) is an option to build the application and run 
@@ -44,7 +44,7 @@ Once the the image is available, you can simply run the provided script which wi
 at http://localhost:9092/api/hello .
 
 ```shell script
-$ ./docker-run.sh
+./docker-run.sh
 ```
 :point_up: NOTE: the `docker-run.sh` script is setup to **not** maintain state between executions.  This means each
 time you start the container, you will be starting with a freshly created database.
