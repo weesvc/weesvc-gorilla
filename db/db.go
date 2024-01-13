@@ -2,7 +2,7 @@ package db
 
 import (
 	"github.com/jinzhu/gorm"
-	// Notes the database dialect to be used
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/pkg/errors"
 )
@@ -14,9 +14,9 @@ type Database struct {
 
 // New creates a new instance of the data access object given configuration settings.
 func New(config *Config) (*Database, error) {
-	db, err := gorm.Open("sqlite3", config.DatabaseURI)
+	db, err := gorm.Open(config.Dialect, config.DatabaseURI)
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to connect to database")
+		return nil, errors.Wrapf(err, "unable to connect to %s database", config.Dialect)
 	}
 
 	db.LogMode(config.Verbose)

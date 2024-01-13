@@ -1,2 +1,4 @@
 DatabaseURI: "/Users/paul/Develop/weesvc-gorilla/gorm.db"
+# Specify dialect as "postgres" or "sqlite3". "sqlite3" is default.
+#Dialect: sqlite3
 #Verbose: true
