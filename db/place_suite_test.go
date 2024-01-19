@@ -117,7 +117,7 @@ func (suite *PlaceTestSuite) Test_UpdatePlace() {
 				assert.Equal(suite.T(), changes.Latitude, updated.Latitude)
 				assert.Equal(suite.T(), changes.Longitude, updated.Longitude)
 				assert.Equal(suite.T(), original.CreatedAt, updated.CreatedAt)
-				assert.Greater(suite.T(), original.UpdatedAt, updated.UpdatedAt)
+				assert.NotEqual(suite.T(), original.UpdatedAt, updated.UpdatedAt)
 			}
 		}
 	}

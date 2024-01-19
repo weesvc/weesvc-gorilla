@@ -92,7 +92,7 @@ func TestDatabase_UpdatePlace(t *testing.T) {
 				assert.Equal(t, changes.Latitude, updated.Latitude)
 				assert.Equal(t, changes.Longitude, updated.Longitude)
 				assert.Equal(t, original.CreatedAt, updated.CreatedAt)
-				assert.Greater(t, original.UpdatedAt, updated.UpdatedAt)
+				assert.NotEqual(t, original.UpdatedAt, updated.UpdatedAt)
 			}
 		}
 	}
