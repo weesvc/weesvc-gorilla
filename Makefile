@@ -23,7 +23,7 @@ DOCKER_TAG := $(BUILD_VERSION)
 LINKER_FLAGS := "-X $(PROJECT_MODULE)/env.Version=$(BUILD_VERSION) -X $(PROJECT_MODULE)/env.Revision=$(BUILD_REVISION)"
 
 
-all: imports fmt lint vet build
+all: imports fmt vet build
 
 ## help: Prints a list of available build targets.
 help:
@@ -36,7 +36,7 @@ help:
 	echo "Targets run by default are: `sed -n 's/^all: //p' ./Makefile | sed -e 's/ /, /g' | sed -e 's/\(.*\), /\1, and /'`"
 
 ## clean-all: Scrub all build artifacts and vendored code.
-clean-all: clean clean-vendor
+clean-all: clean
 
 ## clean: Remove all build artifacts and generated files.
 clean: clean-artifacts
@@ -46,10 +46,6 @@ clean: clean-artifacts
 ## clean-artifacts: Remove all build artifacts.
 clean-artifacts:
 	rm -Rf artifacts/
-
-## clean-vendor: Remove vendored code.
-clean-vendor:
-	find $(CURDIR)/vendor -type d -print0 2>/dev/null | xargs -0 rm -Rf
 
 ## deps: Verifies and cleans up module dependencies.
 deps:
@@ -70,11 +66,6 @@ fmt:
 	echo "Formatting code..."
 	go fmt ./...
 
-## lint: Reports any stylistic mistakes on the codebase.
-lint:
-	echo "Linting code..."
-	golangci-lint run
-
 ## vet: Searches for any suspicious constructs within the codebase.
 vet:
 	echo "Vetting code..."
@@ -84,11 +75,10 @@ vet:
 setup:
 	echo "Installing tools..."
 	go install golang.org/x/tools/cmd/goimports@latest
-	go get -u golang.org/x/lint/golint
 
 
 ## build: Build the application.
-build: deps imports fmt lint vet build-only
+build: deps imports fmt vet build-only
 
 ## build-only: Build without prerequisite steps
 build-only:
@@ -99,7 +89,7 @@ build-only:
 	   -o "bin/$(PROJECT_NAME)" .
 
 ## build-all: Builds all architectures of the application.
-build-all: deps imports fmt lint vet
+build-all: deps imports fmt vet
 	mkdir -v -p $(CURDIR)/artifacts
 	gox -verbose \
 	    -os "$(BUILD_OS)" -arch "$(BUILD_ARCH)" \
@@ -117,13 +107,8 @@ build-docker:
 release-docker: build-docker
 	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
 
-## vendor: Pull dependent code into the codebase for direct inclusion.
-vendor: deps
-	echo "Vendoring dependencies..."
-	go mod vendor
-
 
 .PHONY: build build-all \
-        clean clean-all clean-artifacts clean-vendor \
-        deps fmt help imports lint \
-        setup test vendor vet
+        clean clean-all clean-artifacts \
+        deps fmt help imports \
+        setup test vet
