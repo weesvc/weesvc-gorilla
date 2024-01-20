@@ -5,11 +5,12 @@ Implementation of the WeeSVC application using [Go](https://golang.org/) and the
 The following external libraries were *directly* utilized in this project.
 
 | Package     | Link                                   | Description                                                             |
-| ---         | ---                                    | ---                                                                     |
+|-------------|----------------------------------------|-------------------------------------------------------------------------|
 | Go          | https://golang.org/                    | Well...it's obvious isn't it?!                                          |
 | Gorilla Mux | https://www.gorillatoolkit.org/pkg/mux | Web Toolkit providing HTTP server and routing                           |
 | GORM        | https://gorm.io/                       | Database ORM                                                            |
 | SQLite      | https://www.sqlite.org/index.html      | The lightweight database                                                |
+| Postgres    | https://www.postgresql.org/            | An advanced opensource relational database                              |
 | Cobra       | https://github.com/spf13/cobra         | Command-line library                                                    |
 | Viper       | https://github.com/spf13/viper         | Awesome configuration library for settings                              |
 | Logrus      | https://github.com/sirupsen/logrus     | Logging abstraction for the Go standard library                         |
@@ -43,9 +44,9 @@ Once the image is available, you can simply run the provided script which will o
 ```shell script
 ./docker-run.sh
 ```
-> [!IMPORTANT]
-> The `docker-run.sh` script is setup to **not** maintain state between executions.
-> This means each time you start the container, you will be starting with a freshly created database.
+> [!CAUTION]
+> The `docker-run.sh` script will **not** maintain state between executions.
+> This means each time you start the container, you will be starting with a freshly created sqlite3 database.
 
 ## Using the Application
 Update the `DatabaseURI` setting in your `config.yaml` for the absolute path to the base project directory, i.e. the path for the directory containing this README.
