@@ -11,11 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Here we're testing each CRUD method independently, but we're using a fresh container
-// for each test. This _may_ be ok, but could be a bit of overhead for CICD pipelines.
-//
-// With this method, we've refactored some container work into the `testhelpers` package.
-
 func TestDatabase_GetPlaces(t *testing.T) {
 	t.Parallel()
 	placeDb := setupDatabase(t)
@@ -113,6 +108,7 @@ func TestDatabase_DeletePlaceByID(t *testing.T) {
 	}
 }
 
+// setupDatabase creates an isolated `Database` instance backed by a Postgres Testcontainer.
 func setupDatabase(t *testing.T) *Database {
 	ctx := context.Background()
 
