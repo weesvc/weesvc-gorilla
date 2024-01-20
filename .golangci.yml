@@ -1,0 +1,95 @@
+# v1.55.2
+# Please don't remove the first line. It is used in CI to determine the golangci-lint version.
+run:
+  timeout: 5m
+
+issues:
+  exclude-rules:
+    - path: _(test|gen)\.go
+      linters:
+        - cyclop
+        - dupl
+        - gocognit
+        - funlen
+        - lll
+    - path: (cmd|env|migrations)\/
+      linters:
+        - gochecknoglobals
+
+linters-settings:
+  govet:
+    check-shadowing: true
+  funlen:
+    lines: 80
+    statements: 60
+  forbidigo:
+    forbid:
+      - '^(fmt\\.Print(|f|ln)|print|println)$'
+
+linters:
+  disable-all: true
+  enable:
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - contextcheck
+    - cyclop
+    - dogsled
+    - dupl
+    - durationcheck
+    - errcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - exhaustive
+    - exportloopref
+    - forbidigo
+    - forcetypeassert
+    - funlen
+    - gocheckcompilerdirectives
+    - gochecknoglobals
+    - gocognit
+    - goconst
+    - gocritic
+    - gofmt
+    - gofumpt
+    - goimports
+    - gomoddirectives
+    - goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - importas
+    - ineffassign
+    - interfacebloat
+    - lll
+    - makezero
+    - misspell
+    - nakedret
+    - nestif
+    - nilerr
+    - nilnil
+    - noctx
+    - nolintlint
+    - nosprintfhostport
+    - paralleltest
+    - prealloc
+    - predeclared
+    - promlinter
+    - revive
+    - reassign
+    - rowserrcheck
+    - sqlclosecheck
+    - staticcheck
+    - stylecheck
+    - tenv
+    - tparallel
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+  fast: false
