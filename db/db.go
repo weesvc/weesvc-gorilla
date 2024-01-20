@@ -1,10 +1,13 @@
+// Package db contains implementations for accessing back-end databases.
 package db
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
+
+	// Initialize supported dialects
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/pkg/errors"
 )
 
 // Database represents the data access object.

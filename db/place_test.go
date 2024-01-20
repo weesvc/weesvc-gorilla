@@ -13,21 +13,21 @@ import (
 
 func TestDatabase_GetPlaces(t *testing.T) {
 	t.Parallel()
-	placeDb := setupDatabase(t)
+	placeDB := setupDatabase(t)
 
-	places, err := placeDb.GetPlaces()
+	places, err := placeDB.GetPlaces()
 	assert.NoError(t, err)
 	assert.Equal(t, 10, len(places))
 }
 
 func TestDatabase_GetPlaceByID(t *testing.T) {
 	t.Parallel()
-	placeDb := setupDatabase(t)
+	placeDB := setupDatabase(t)
 
-	fetchId := uint(6)
-	place, err := placeDb.GetPlaceByID(fetchId)
+	fetchID := uint(6)
+	place, err := placeDB.GetPlaceByID(fetchID)
 	if assert.NoError(t, err) {
-		assert.Equal(t, fetchId, place.ID)
+		assert.Equal(t, fetchID, place.ID)
 		assert.Equal(t, "MIA", place.Name)
 		assert.Equal(t, "Miami International Airport, FL, USA", place.Description)
 		assert.Equal(t, 25.79516, place.Latitude)
@@ -39,7 +39,7 @@ func TestDatabase_GetPlaceByID(t *testing.T) {
 
 func TestDatabase_CreatePlace(t *testing.T) {
 	t.Parallel()
-	placeDb := setupDatabase(t)
+	placeDB := setupDatabase(t)
 
 	newPlace := &model.Place{
 		ID:          20,
@@ -48,10 +48,10 @@ func TestDatabase_CreatePlace(t *testing.T) {
 		Latitude:    64.04126,
 		Longitude:   -20.88530,
 	}
-	err := placeDb.CreatePlace(newPlace)
+	err := placeDB.CreatePlace(newPlace)
 	if assert.NoError(t, err) {
 		// Verify our inserted place
-		created, err := placeDb.GetPlaceByID(newPlace.ID)
+		created, err := placeDB.GetPlaceByID(newPlace.ID)
 		if assert.NoError(t, err) {
 			assert.Equal(t, newPlace.ID, created.ID)
 			assert.Equal(t, newPlace.Name, created.Name)
@@ -66,9 +66,9 @@ func TestDatabase_CreatePlace(t *testing.T) {
 
 func TestDatabase_UpdatePlace(t *testing.T) {
 	t.Parallel()
-	placeDb := setupDatabase(t)
+	placeDB := setupDatabase(t)
 
-	original, err := placeDb.GetPlaceByID(7)
+	original, err := placeDB.GetPlaceByID(7)
 	if assert.NoError(t, err) {
 		changes := &model.Place{
 			ID:          original.ID,
@@ -77,9 +77,9 @@ func TestDatabase_UpdatePlace(t *testing.T) {
 			Latitude:    29.42590,
 			Longitude:   -98.48625,
 		}
-		if assert.NoError(t, placeDb.UpdatePlace(changes)) {
+		if assert.NoError(t, placeDB.UpdatePlace(changes)) {
 			// Verify the updated place
-			updated, err := placeDb.GetPlaceByID(original.ID)
+			updated, err := placeDB.GetPlaceByID(original.ID)
 			if assert.NoError(t, err) {
 				assert.Equal(t, original.ID, updated.ID)
 				assert.Equal(t, changes.Name, updated.Name)
@@ -95,14 +95,14 @@ func TestDatabase_UpdatePlace(t *testing.T) {
 
 func TestDatabase_DeletePlaceByID(t *testing.T) {
 	t.Parallel()
-	placeDb := setupDatabase(t)
+	placeDB := setupDatabase(t)
 
 	deleteID := uint(1)
-	_, err := placeDb.GetPlaceByID(deleteID)
+	_, err := placeDB.GetPlaceByID(deleteID)
 	if assert.NoError(t, err) {
-		if assert.NoError(t, placeDb.DeletePlaceByID(deleteID)) {
+		if assert.NoError(t, placeDB.DeletePlaceByID(deleteID)) {
 			// Verify no longer retrievable
-			_, err = placeDb.GetPlaceByID(deleteID)
+			_, err = placeDB.GetPlaceByID(deleteID)
 			assert.EqualError(t, err, "unable to get place: record not found")
 		}
 	}
@@ -117,7 +117,7 @@ func setupDatabase(t *testing.T) *Database {
 		log.Fatal(err)
 	}
 
-	placeDb, err := New(&Config{
+	placeDB, err := New(&Config{
 		DatabaseURI: pgContainer.ConnectionString,
 		Dialect:     "postgres",
 		Verbose:     true,
@@ -132,5 +132,5 @@ func setupDatabase(t *testing.T) *Database {
 		}
 	})
 
-	return placeDb
+	return placeDB
 }

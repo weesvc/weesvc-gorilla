@@ -1,3 +1,5 @@
+// Package migrations contains updates to evolve database schemas
+// as the application evolves.
 package migrations
 
 import "github.com/jinzhu/gorm"

@@ -13,7 +13,7 @@ import (
 	"github.com/weesvc/weesvc-gorilla/model"
 )
 
-func (a *API) getPlaces(ctx *app.Context, w http.ResponseWriter, r *http.Request) error {
+func (a *API) getPlaces(ctx *app.Context, w http.ResponseWriter, _ *http.Request) error {
 	places, err := ctx.GetPlaces()
 	if err != nil {
 		return err
@@ -42,7 +42,9 @@ type createPlaceResponse struct {
 func (a *API) createPlace(ctx *app.Context, w http.ResponseWriter, r *http.Request) error {
 	var input createPlaceInput
 
-	defer r.Body.Close()
+	defer func() {
+		_ = r.Body.Close()
+	}()
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
@@ -100,7 +102,9 @@ func (a *API) updatePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.R
 
 	var input updatePlaceInput
 
-	defer r.Body.Close()
+	defer func() {
+		_ = r.Body.Close()
+	}()
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return err
@@ -145,7 +149,6 @@ func (a *API) updatePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.R
 func (a *API) deletePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.Request) error {
 	id := getIDFromRequest(r)
 	err := ctx.DeletePlaceByID(id)
-
 	if err != nil {
 		return handleError(w, r, err)
 	}

@@ -39,7 +39,7 @@ func (ctx *Context) validatePlace(place *model.Place) *ValidationError {
 // UpdatePlace saves changes made to the provided place.
 func (ctx *Context) UpdatePlace(place *model.Place) error {
 	if err := ctx.validatePlace(place); err != nil {
-		return nil
+		return err
 	}
 
 	return ctx.Database.UpdatePlace(place)

@@ -58,10 +58,7 @@ var serveCmd = &cobra.Command{
 			return err
 		}
 
-		api, err := api.New(a)
-		if err != nil {
-			return err
-		}
+		api := api.New(a)
 
 		ctx, cancel := context.WithCancel(context.Background())
 

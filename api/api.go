@@ -1,3 +1,4 @@
+// Package api provides service access from external HTTP clients.
 package api
 
 import (
@@ -33,13 +34,10 @@ type API struct {
 }
 
 // New creates a new API instance.
-func New(a *app.App) (api *API, err error) {
+func New(a *app.App) (api *API) {
 	api = &API{App: a}
-	api.Config, err = initConfig()
-	if err != nil {
-		return nil, err
-	}
-	return api, nil
+	api.Config = initConfig()
+	return api
 }
 
 // Init is where we define the routes our API will support.
@@ -125,8 +123,10 @@ func (a *API) handler(f func(*app.Context, http.ResponseWriter, *http.Request) e
 	})
 }
 
-func (a *API) helloHandler(ctx *app.Context, w http.ResponseWriter, r *http.Request) error {
-	_, err := w.Write([]byte(fmt.Sprintf(`{"hello":"world","remote_address":%q,"trace_id":%q}`, ctx.RemoteAddress, ctx.TraceID)))
+func (a *API) helloHandler(ctx *app.Context, w http.ResponseWriter, _ *http.Request) error {
+	_, err := w.Write([]byte(
+		fmt.Sprintf(`{"hello":"world","remote_address":%q,"trace_id":%q}`,
+			ctx.RemoteAddress, ctx.TraceID)))
 	return err
 }
 

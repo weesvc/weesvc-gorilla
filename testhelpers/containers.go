@@ -1,3 +1,4 @@
+// Package testhelpers contains utilities for unit and integration testing.
 package testhelpers
 
 import (

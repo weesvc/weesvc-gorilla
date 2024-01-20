@@ -1,3 +1,4 @@
+// Package env provides system-wide build information.
 package env
 
 var (

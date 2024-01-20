@@ -8,12 +8,12 @@ type Config struct {
 	Port int
 }
 
-func initConfig() (*Config, error) {
+func initConfig() *Config {
 	config := &Config{
 		Port: viper.GetInt("Port"),
 	}
 	if config.Port == 0 {
 		config.Port = 9092
 	}
-	return config, nil
+	return config
 }

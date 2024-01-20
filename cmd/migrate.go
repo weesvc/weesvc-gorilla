@@ -31,7 +31,9 @@ var migrateCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		defer a.Close()
+		defer func() {
+			_ = a.Close()
+		}()
 
 		// Make sure Migration table is there
 		logrus.Debug("ensuring migrations table is present")
@@ -61,7 +63,7 @@ var migrateCmd = &cobra.Command{
 		}
 
 		if uint(number) <= latest.Number && latest.Number > 0 {
-			logrus.Info("no migrations to apply, specified number is less than or equal to latest migration; backwards migrations are not supported")
+			logrus.Info("no migrations to apply; number is less than or equal to latest migration")
 			return nil
 		}
 

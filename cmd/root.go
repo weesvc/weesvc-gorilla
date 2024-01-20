@@ -1,3 +1,4 @@
+// Package cmd contains available commands for command line access.
 package cmd
 
 import (

@@ -1,3 +1,4 @@
+// Package app provides the core service implementations.
 package app
 
 import (
@@ -46,7 +47,7 @@ type ValidationError struct {
 	Message string `json:"message"`
 }
 
-// Here is a poorly formatted function!
+// Error creates an error message from the underlying ValidationError.
 func (e *ValidationError) Error() string {
 	return e.Message
 }
@@ -57,6 +58,7 @@ type UserError struct {
 	StatusCode int    `json:"-"`
 }
 
+// Error creates an error message from the underlying UserError.
 func (e *UserError) Error() string {
 	return e.Message
 }

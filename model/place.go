@@ -1,3 +1,4 @@
+// Package model provides common data structures utilized by services.
 package model
 
 import "time"

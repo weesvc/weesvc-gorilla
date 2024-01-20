@@ -6,6 +6,7 @@ import (
 )
 
 func TestAddressForRequest(t *testing.T) {
+	t.Parallel()
 	testCases := []struct {
 		remoteAddr string
 		expected   string
@@ -23,6 +24,7 @@ func TestAddressForRequest(t *testing.T) {
 	for _, tc := range testCases {
 		tc := tc // pin
 		t.Run(tc.remoteAddr, func(t *testing.T) {
+			t.Parallel()
 			request := mockRequest(tc.remoteAddr)
 			actual := fixture.addressForRequest(&request)
 			if actual != tc.expected {
