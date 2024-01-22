@@ -50,7 +50,7 @@ func (a *API) createPlace(ctx *app.Context, w http.ResponseWriter, r *http.Reque
 		return err
 	}
 
-	if err := json.Unmarshal(body, &input); err != nil {
+	if err = json.Unmarshal(body, &input); err != nil {
 		return err
 	}
 
@@ -61,7 +61,7 @@ func (a *API) createPlace(ctx *app.Context, w http.ResponseWriter, r *http.Reque
 		Longitude:   input.Longitude,
 	}
 
-	if err := ctx.CreatePlace(place); err != nil {
+	if err = ctx.CreatePlace(place); err != nil {
 		return err
 	}
 
@@ -110,7 +110,7 @@ func (a *API) updatePlaceByID(ctx *app.Context, w http.ResponseWriter, r *http.R
 		return err
 	}
 
-	if err := json.Unmarshal(body, &input); err != nil {
+	if err = json.Unmarshal(body, &input); err != nil {
 		return err
 	}
 
