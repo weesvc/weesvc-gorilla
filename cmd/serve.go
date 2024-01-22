@@ -36,6 +36,7 @@ func serveAPI(ctx context.Context, api *api.API) {
 	done := make(chan struct{})
 	go func() {
 		<-ctx.Done()
+		//nolint:contextcheck
 		if err := s.Shutdown(context.Background()); err != nil {
 			logrus.Error(err)
 		}

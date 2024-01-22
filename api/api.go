@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pkg/errors"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
@@ -69,6 +71,7 @@ func (a *API) handler(f func(*app.Context, http.ResponseWriter, *http.Request) e
 		ctx := a.App.NewContext().WithRemoteAddress(a.addressForRequest(r)).WithTraceID(traceID)
 
 		defer func() {
+			//nolint: forcetypeassert
 			statusCode := w.(*statusCodeRecorder).StatusCode
 			if statusCode == 0 {
 				statusCode = 200
@@ -93,34 +96,46 @@ func (a *API) handler(f func(*app.Context, http.ResponseWriter, *http.Request) e
 		w.Header().Set("Content-Type", "application/json")
 
 		if err := f(ctx, w, r); err != nil {
-			if verr, ok := err.(*app.ValidationError); ok {
-				data, err := json.Marshal(verr)
-				if err == nil {
-					w.WriteHeader(http.StatusBadRequest)
-					_, err = w.Write(data)
-				}
+			var verr *app.ValidationError
+			var uerr *app.UserError
 
-				if err != nil {
-					ctx.Logger.Error(err)
-					http.Error(w, "internal server error", http.StatusInternalServerError)
-				}
-			} else if uerr, ok := err.(*app.UserError); ok {
-				data, err := json.Marshal(uerr)
-				if err == nil {
-					w.WriteHeader(uerr.StatusCode)
-					_, err = w.Write(data)
-				}
-
-				if err != nil {
-					ctx.Logger.Error(err)
-					http.Error(w, "internal server error", http.StatusInternalServerError)
-				}
-			} else {
+			switch {
+			case errors.As(err, &verr):
+				handleValidationError(ctx, w, verr)
+			case errors.As(err, &uerr):
+				handleUserError(ctx, w, uerr)
+			default:
 				ctx.Logger.Error(err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 			}
 		}
 	})
+}
+
+func handleValidationError(ctx *app.Context, w http.ResponseWriter, verr *app.ValidationError) {
+	data, err := json.Marshal(verr)
+	if err == nil {
+		w.WriteHeader(http.StatusBadRequest)
+		_, err = w.Write(data)
+	}
+
+	if err != nil {
+		ctx.Logger.Error(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+	}
+}
+
+func handleUserError(ctx *app.Context, w http.ResponseWriter, uerr *app.UserError) {
+	data, err := json.Marshal(uerr)
+	if err == nil {
+		w.WriteHeader(uerr.StatusCode)
+		_, err = w.Write(data)
+	}
+
+	if err != nil {
+		ctx.Logger.Error(err)
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+	}
 }
 
 func (a *API) helloHandler(ctx *app.Context, w http.ResponseWriter, _ *http.Request) error {
