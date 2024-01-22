@@ -3,6 +3,5 @@
 .git/
 .gitignore
 .idea/
-Dockerfile
 bin/
 gorm.db
