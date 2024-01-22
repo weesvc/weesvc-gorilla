@@ -13,6 +13,7 @@ require (
 	github.com/spf13/viper v1.18.2
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.27.0
+	github.com/testcontainers/testcontainers-go/modules/k6 v0.27.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.27.0
 )
 

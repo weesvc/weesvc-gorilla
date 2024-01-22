@@ -53,8 +53,8 @@ deps:
 	go mod tidy
 
 ## test: Runs unit tests for the application.
-test: deps
-	go test -cover ./...
+test:
+	go test -test.short -cover ./...
 
 ## imports: Organizes imports within the codebase.
 imports:
