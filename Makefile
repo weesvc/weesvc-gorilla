@@ -76,7 +76,6 @@ setup:
 	echo "Installing tools..."
 	go install golang.org/x/tools/cmd/goimports@latest
 
-
 ## build: Build the application.
 build: deps imports fmt vet build-only
 
@@ -107,8 +106,13 @@ build-docker:
 release-docker: build-docker
 	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+## develop: Start the application in hot-reload mode.
+develop: build-only
+	go install github.com/cosmtrek/air@latest
+	air -c ./.air.toml -- serve
+
 
 .PHONY: build build-all \
         clean clean-all clean-artifacts \
-        deps fmt help imports \
+        deps develop fmt help imports \
         setup test vet
