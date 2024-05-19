@@ -1,90 +1,30 @@
 package cmd
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-	"os"
-	"os/signal"
-	"sync"
-	"time"
-
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
-	"github.com/weesvc/weesvc-gorilla/internal/api"
-	"github.com/weesvc/weesvc-gorilla/internal/app"
+	"github.com/weesvc/weesvc-gorilla/internal/config"
+
+	"github.com/weesvc/weesvc-gorilla/internal/server"
 )
 
-func serveAPI(ctx context.Context, api *api.API) {
-	cors := handlers.CORS(
-		handlers.AllowedOrigins([]string{"*"}),
-		handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "OPTIONS"}),
-	)
-
-	router := mux.NewRouter()
-	api.Init(router.PathPrefix("/api").Subrouter())
-
-	s := &http.Server{
-		Addr:        fmt.Sprintf(":%d", api.Config.Port),
-		Handler:     cors(router),
-		ReadTimeout: 2 * time.Minute,
+func newServeCommand(config *config.Config) *cobra.Command {
+	serveCmd := &cobra.Command{
+		Use:   "serve",
+		Short: "Starts the application server",
+		RunE: func(_ *cobra.Command, _ []string) error {
+			return server.StartServer(config)
+		},
 	}
 
-	done := make(chan struct{})
-	go func() {
-		<-ctx.Done()
-		//nolint:contextcheck
-		if err := s.Shutdown(context.Background()); err != nil {
-			logrus.Error(err)
-		}
-		close(done)
-	}()
+	serveCmd.PersistentFlags().IntVarP(&config.Port, "api-port", "p", 9092, "port to access the api")
+	serveCmd.PersistentFlags().StringVar(&config.Dialect, "dialect", "sqlite3", "database dialect")
+	serveCmd.PersistentFlags().StringVar(&config.DatabaseURI, "database-uri", "", "database connection string")
 
-	logrus.Infof("serving api at http://127.0.0.1:%d", api.Config.Port)
-	if err := s.ListenAndServe(); err != http.ErrServerClosed {
-		logrus.Error(err)
-	}
-	<-done
-}
+	_ = viper.BindPFlag("Port", serveCmd.PersistentFlags().Lookup("api-port"))
+	_ = viper.BindPFlag("Dialect", serveCmd.PersistentFlags().Lookup("dialect"))
+	_ = viper.BindPFlag("DatabaseURI", serveCmd.PersistentFlags().Lookup("database-uri"))
 
-var serveCmd = &cobra.Command{
-	Use:   "serve",
-	Short: "Starts the application server",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		a, err := app.New()
-		if err != nil {
-			return err
-		}
-
-		api := api.New(a)
-
-		ctx, cancel := context.WithCancel(context.Background())
-
-		go func() {
-			ch := make(chan os.Signal, 1)
-			signal.Notify(ch, os.Interrupt)
-			<-ch
-			logrus.Info("signal caught. shutting down...")
-			cancel()
-		}()
-
-		var wg sync.WaitGroup
-
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			defer cancel()
-			serveAPI(ctx, api)
-		}()
-
-		wg.Wait()
-		return nil
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(serveCmd)
+	return serveCmd
 }

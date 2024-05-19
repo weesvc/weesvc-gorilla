@@ -5,6 +5,8 @@ import (
 	"log"
 	"testing"
 
+	"github.com/weesvc/weesvc-gorilla/internal/config"
+
 	"github.com/weesvc/weesvc-gorilla/internal/model"
 
 	"github.com/weesvc/weesvc-gorilla/testhelpers"
@@ -118,7 +120,7 @@ func setupDatabase(t *testing.T) *Database {
 		log.Fatal(err)
 	}
 
-	placeDB, err := New(&Config{
+	placeDB, err := New(&config.Config{
 		DatabaseURI: pgContainer.ConnectionString,
 		Dialect:     "postgres",
 		Verbose:     true,

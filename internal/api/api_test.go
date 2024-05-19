@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"testing"
+
+	"github.com/weesvc/weesvc-gorilla/internal/app"
 )
 
 func TestAddressForRequest(t *testing.T) {
@@ -20,7 +22,7 @@ func TestAddressForRequest(t *testing.T) {
 			expected:   "[::1]",
 		},
 	}
-	fixture := API{Config: &Config{}}
+	fixture := API{App: &app.App{}}
 	for _, tc := range testCases {
 		tc := tc // pin
 		t.Run(tc.remoteAddr, func(t *testing.T) {

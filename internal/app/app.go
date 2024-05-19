@@ -2,34 +2,31 @@
 package app
 
 import (
-	"github.com/sirupsen/logrus"
+	"log/slog"
 
+	"github.com/weesvc/weesvc-gorilla/internal/config"
 	"github.com/weesvc/weesvc-gorilla/internal/db"
 )
 
 // App defines the main application state and behaviors.
 type App struct {
+	Config   *config.Config
 	Database *db.Database
 }
 
 // NewContext creates context to bind to an incoming request.
 func (a *App) NewContext() *Context {
 	return &Context{
-		Logger:   logrus.New(),
+		Logger:   slog.Default(),
 		Database: a.Database,
 	}
 }
 
 // New constructs a new instance of the application.
-func New() (app *App, err error) {
-	app = &App{}
+func New(config *config.Config) (app *App, err error) {
+	app = &App{Config: config}
 
-	dbConfig, err := db.InitConfig()
-	if err != nil {
-		return nil, err
-	}
-
-	app.Database, err = db.New(dbConfig)
+	app.Database, err = db.New(config)
 	if err != nil {
 		return nil, err
 	}

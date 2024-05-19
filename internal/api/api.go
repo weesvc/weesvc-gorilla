@@ -13,7 +13,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
-	"github.com/sirupsen/logrus"
 
 	"github.com/weesvc/weesvc-gorilla/internal/app"
 )
@@ -31,14 +30,12 @@ func (r *statusCodeRecorder) WriteHeader(statusCode int) {
 
 // API represents the context for the public interface.
 type API struct {
-	App    *app.App
-	Config *Config
+	App *app.App
 }
 
 // New creates a new API instance.
 func New(a *app.App) (api *API) {
 	api = &API{App: a}
-	api.Config = initConfig()
 	return api
 }
 
@@ -78,18 +75,18 @@ func (a *API) handler(f func(*app.Context, http.ResponseWriter, *http.Request) e
 			}
 			duration := time.Since(beginTime)
 
-			ctx.Logger.WithFields(logrus.Fields{
-				"duration":       duration,
-				"status_code":    statusCode,
-				"remote_address": ctx.RemoteAddress,
-				"trace_id":       ctx.TraceID,
-			}).Info(r.Method + " " + r.URL.RequestURI())
+			ctx.Logger.With(
+				"duration", duration,
+				"status_code", statusCode,
+				"remote_address", ctx.RemoteAddress,
+				"trace_id", ctx.TraceID,
+			).Info(r.Method + " " + r.URL.RequestURI())
 		}()
 
 		defer func() {
 			if r := recover(); r != nil {
-				ctx.Logger.Error(fmt.Errorf("%v: %s", r, debug.Stack()))
-				http.Error(w, "internal server error", http.StatusInternalServerError)
+				ctx.Logger.Error(fmt.Sprintf("%v: %s", r, debug.Stack()))
+				http.Error(w, "internal api error", http.StatusInternalServerError)
 			}
 		}()
 
@@ -105,8 +102,8 @@ func (a *API) handler(f func(*app.Context, http.ResponseWriter, *http.Request) e
 			case errors.As(err, &uerr):
 				handleUserError(ctx, w, uerr)
 			default:
-				ctx.Logger.Error(err)
-				http.Error(w, "internal server error", http.StatusInternalServerError)
+				ctx.Logger.Error(err.Error())
+				http.Error(w, "internal api error", http.StatusInternalServerError)
 			}
 		}
 	})
@@ -120,8 +117,8 @@ func handleValidationError(ctx *app.Context, w http.ResponseWriter, verr *app.Va
 	}
 
 	if err != nil {
-		ctx.Logger.Error(err)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		ctx.Logger.Error(err.Error())
+		http.Error(w, "internal api error", http.StatusInternalServerError)
 	}
 }
 
@@ -133,8 +130,8 @@ func handleUserError(ctx *app.Context, w http.ResponseWriter, uerr *app.UserErro
 	}
 
 	if err != nil {
-		ctx.Logger.Error(err)
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+		ctx.Logger.Error(err.Error())
+		http.Error(w, "internal api error", http.StatusInternalServerError)
 	}
 }
 

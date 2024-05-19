@@ -2,62 +2,82 @@
 package cmd
 
 import (
-	"fmt"
+	"errors"
+	"log/slog"
 	"os"
+	"strings"
+
+	"github.com/weesvc/weesvc-gorilla/internal/config"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var rootCmd = &cobra.Command{
-	Use:   "weesvc",
-	Short: "WeeService Application",
-	Run: func(cmd *cobra.Command, args []string) {
-		if err := cmd.Usage(); err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	},
-}
-
 // Execute parses and runs the command line.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+	if err := newRootCommand().Execute(); err != nil {
+		slog.Error(err.Error())
 		os.Exit(1)
 	}
 }
 
-var (
-	configFile string
-	verbose    bool
-)
+func newRootCommand() *cobra.Command {
+	configFile := ""
+	cfg := config.NewConfig()
 
-func init() {
-	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is config.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
-
-	if err := viper.BindPFlag("Verbose", rootCmd.PersistentFlags().Lookup("verbose")); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+	rootCmd := &cobra.Command{
+		Use:   "weesvc",
+		Short: "WeeService Application",
+		PersistentPreRunE: func(_ *cobra.Command, _ []string) error {
+			return initConfig(configFile, cfg)
+		},
+		Run: func(cmd *cobra.Command, _ []string) {
+			if err := cmd.Usage(); err != nil {
+				slog.Error(err.Error())
+				os.Exit(1)
+			}
+		},
 	}
+
+	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file")
+	rootCmd.PersistentFlags().BoolVar(&cfg.Verbose, "verbose", false, "verbose output")
+
+	_ = viper.BindPFlag("Verbose", rootCmd.PersistentFlags().Lookup("verbose"))
+
+	subCommands := []func(*config.Config) *cobra.Command{
+		newServeCommand,
+		newMigrateCommand,
+		newVersionCommand,
+	}
+	for _, sc := range subCommands {
+		rootCmd.AddCommand(sc(cfg))
+	}
+
+	return rootCmd
 }
 
-func initConfig() {
-	if configFile != "" {
-		viper.SetConfigFile(configFile)
-	} else {
-		viper.SetConfigName("config")
-		viper.AddConfigPath(".")
-		viper.AddConfigPath("/etc/weesvc")
-		viper.AddConfigPath("$HOME/.weesvc")
-	}
-
-	viper.AutomaticEnv()
+func initConfig(configFile string, config *config.Config) error {
+	viper.SetConfigFile(configFile)
+	viper.AddConfigPath(".")
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("unable to read config: %v\n", err)
-		os.Exit(1)
+		// If not found, we'll use defaults and suffer consequences otherwise
+		if !errors.As(err, &viper.ConfigFileNotFoundError{}) {
+			return err
+		}
 	}
+
+	// Enable overrides by environment variable
+	// E.g. WEESVC_DIALECT will override `Dialect` within the configuration!
+	viper.SetEnvPrefix("WEESVC")
+	// Hashes and dots should be treated as underscores
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_", "-", "_"))
+	viper.AutomaticEnv()
+
+	// Populate our configuration object
+	if err := viper.Unmarshal(config); err != nil {
+		return err
+	}
+
+	return nil
 }

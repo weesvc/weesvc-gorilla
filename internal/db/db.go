@@ -5,6 +5,8 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 
+	"github.com/weesvc/weesvc-gorilla/internal/config"
+
 	// Initialize supported dialects
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -16,7 +18,7 @@ type Database struct {
 }
 
 // New creates a new instance of the data access object given configuration settings.
-func New(config *Config) (*Database, error) {
+func New(config *config.Config) (*Database, error) {
 	db, err := gorm.Open(config.Dialect, config.DatabaseURI)
 	if err != nil {
 		return nil, errors.Wrapf(err, "unable to connect to %s database", config.Dialect)

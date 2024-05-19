@@ -1,22 +1,23 @@
 package app
 
 import (
+	"log/slog"
+
 	"github.com/google/uuid"
-	"github.com/sirupsen/logrus"
 
 	"github.com/weesvc/weesvc-gorilla/internal/db"
 )
 
 // Context provides for a request-scoped context.
 type Context struct {
-	Logger        logrus.FieldLogger
+	Logger        *slog.Logger
 	RemoteAddress string
 	TraceID       uuid.UUID
 	Database      *db.Database
 }
 
 // WithLogger associates the provided logger to the request context.
-func (ctx *Context) WithLogger(logger logrus.FieldLogger) *Context {
+func (ctx *Context) WithLogger(logger *slog.Logger) *Context {
 	ret := *ctx
 	ret.Logger = logger
 	return &ret
