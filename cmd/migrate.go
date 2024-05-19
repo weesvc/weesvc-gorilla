@@ -8,8 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/weesvc/weesvc-gorilla/app"
-	"github.com/weesvc/weesvc-gorilla/migrations"
+	"github.com/weesvc/weesvc-gorilla/internal/app"
+	"github.com/weesvc/weesvc-gorilla/internal/migrations"
 )
 
 var migrateCmd = &cobra.Command{

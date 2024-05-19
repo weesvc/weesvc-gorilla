@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 
-	"github.com/weesvc/weesvc-gorilla/db"
+	"github.com/weesvc/weesvc-gorilla/internal/db"
 )
 
 // Context provides for a request-scoped context.

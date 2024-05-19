@@ -15,7 +15,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 
-	"github.com/weesvc/weesvc-gorilla/app"
+	"github.com/weesvc/weesvc-gorilla/internal/app"
 )
 
 type statusCodeRecorder struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/weesvc/weesvc-gorilla/env"
+	"github.com/weesvc/weesvc-gorilla/internal/env"
 )
 
 var versionCmd = &cobra.Command{

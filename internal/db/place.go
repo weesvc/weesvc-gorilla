@@ -3,7 +3,7 @@ package db
 import (
 	"github.com/pkg/errors"
 
-	"github.com/weesvc/weesvc-gorilla/model"
+	"github.com/weesvc/weesvc-gorilla/internal/model"
 )
 
 // GetPlaces retrieves all available places from the database.

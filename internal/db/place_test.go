@@ -5,7 +5,8 @@ import (
 	"log"
 	"testing"
 
-	"github.com/weesvc/weesvc-gorilla/model"
+	"github.com/weesvc/weesvc-gorilla/internal/model"
+
 	"github.com/weesvc/weesvc-gorilla/testhelpers"
 
 	"github.com/stretchr/testify/assert"

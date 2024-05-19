@@ -14,8 +14,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/weesvc/weesvc-gorilla/api"
-	"github.com/weesvc/weesvc-gorilla/app"
+	"github.com/weesvc/weesvc-gorilla/internal/api"
+	"github.com/weesvc/weesvc-gorilla/internal/app"
 )
 
 func serveAPI(ctx context.Context, api *api.API) {

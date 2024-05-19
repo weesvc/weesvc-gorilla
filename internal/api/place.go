@@ -9,8 +9,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/weesvc/weesvc-gorilla/app"
-	"github.com/weesvc/weesvc-gorilla/model"
+	"github.com/weesvc/weesvc-gorilla/internal/app"
+	"github.com/weesvc/weesvc-gorilla/internal/model"
 )
 
 func (a *API) getPlaces(ctx *app.Context, w http.ResponseWriter, _ *http.Request) error {
