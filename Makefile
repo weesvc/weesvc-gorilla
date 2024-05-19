@@ -58,8 +58,8 @@ test:
 
 ## imports: Organizes imports within the codebase.
 imports:
-	echo "Organizing imports..."
-	goimports -w -l --local $(BASE_MODULE) .
+	echo "[SKIPPING] Organizing imports..."
+#	goimports -w -l --local $(BASE_MODULE) .
 
 ## fmt: Applies appropriate formatting on the codebase.
 fmt:
@@ -109,7 +109,9 @@ release-docker: build-docker
 ## develop: Start the application in hot-reload mode.
 develop: build-only
 	go install github.com/cosmtrek/air@latest
-	air -c ./.air.toml -- serve
+	go install github.com/a-h/templ/cmd/templ@latest
+	templ generate --watch --proxy=http://localhost:9092 &
+	air -c ./.air.toml -- serve -c config-postgres.yaml --server-port=9092
 
 
 .PHONY: build build-all \

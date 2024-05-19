@@ -1,0 +1,12 @@
+services:
+  db:
+    image: postgres:15.3-alpine
+    volumes:
+      - ./testdata/:/docker-entrypoint-initdb.d/
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: weesvc
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres

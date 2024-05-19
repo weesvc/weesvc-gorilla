@@ -13,16 +13,16 @@ func newServeCommand(config *config.Config) *cobra.Command {
 	serveCmd := &cobra.Command{
 		Use:   "serve",
 		Short: "Starts the application server",
-		RunE: func(_ *cobra.Command, _ []string) error {
-			return server.StartServer(config)
+		Run: func(_ *cobra.Command, _ []string) {
+			server.StartServer(config)
 		},
 	}
 
-	serveCmd.PersistentFlags().IntVarP(&config.Port, "api-port", "p", 9092, "port to access the api")
+	serveCmd.PersistentFlags().IntVarP(&config.Port, "server-port", "p", 9092, "port to access the api")
 	serveCmd.PersistentFlags().StringVar(&config.Dialect, "dialect", "sqlite3", "database dialect")
 	serveCmd.PersistentFlags().StringVar(&config.DatabaseURI, "database-uri", "", "database connection string")
 
-	_ = viper.BindPFlag("Port", serveCmd.PersistentFlags().Lookup("api-port"))
+	_ = viper.BindPFlag("Port", serveCmd.PersistentFlags().Lookup("server-port"))
 	_ = viper.BindPFlag("Dialect", serveCmd.PersistentFlags().Lookup("dialect"))
 	_ = viper.BindPFlag("DatabaseURI", serveCmd.PersistentFlags().Lookup("database-uri"))
 

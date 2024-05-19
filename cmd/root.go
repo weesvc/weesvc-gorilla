@@ -39,7 +39,7 @@ func newRootCommand() *cobra.Command {
 		},
 	}
 
-	rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file")
+	rootCmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "config file")
 	rootCmd.PersistentFlags().BoolVar(&cfg.Verbose, "verbose", false, "verbose output")
 
 	_ = viper.BindPFlag("Verbose", rootCmd.PersistentFlags().Lookup("verbose"))

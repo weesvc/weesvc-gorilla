@@ -1,0 +1,38 @@
+package views
+
+import "fmt"
+import "github.com/weesvc/weesvc-gorilla/internal/model"
+
+templ Places(places []*model.Place) {
+    <h2 class="display-4">Places</h2>
+    <div class="card-text">
+    <div>
+        <table id="datatable" class="table table-striped table-hover mb-0">
+        <thead class="sticky-top table-secondary">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Lat</th>
+            <th scope="col">Long</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+    for _, place := range places {
+        <tr>
+            <th scope="row">{ fmt.Sprintf("%d", place.ID) }</th>
+            <td>{ place.Name }</td>
+            <td>{ place.Description }</td>
+            <td>{ fmt.Sprintf("%f", place.Latitude) }</td>
+            <td>{ fmt.Sprintf("%f", place.Longitude) }</td>
+            <td>
+                <a class="btn btn-dark" href={ templ.URL(fmt.Sprintf("https://google.com/search?q=%f,%f", place.Latitude, place.Longitude)) } target="_blank">Visit</a>
+            </td>
+        </tr>
+    }
+        </tbody>
+        </table>
+    </div>
+    </div>
+}
