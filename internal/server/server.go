@@ -46,7 +46,17 @@ func StartServer(config *config.Config) {
 	restapi.Init(router.PathPrefix("/api").Subrouter())
 
 	router.Handle("/", handlers.NewWelcomeHandler()).Methods("GET")
-	router.Handle("/places", handlers.NewPlacesHandler(svc)).Methods("GET")
+
+	ph := handlers.NewPlacesHandler(svc)
+	router.HandleFunc("/places", ph.GetPlaces).Methods("GET")
+	//router.HandleFunc("/places", ph.CreatePlace).Methods("POST")
+	router.HandleFunc("/places/{id:[0-9]+}", ph.GetPlaceByID).Methods("GET")
+	router.HandleFunc("/places/{id:[0-9]+}/edit", ph.GetPlaceEditor).Methods("GET")
+	router.HandleFunc("/places/{id:[0-9]+}/cancel", ph.GetPlaceDetails).Methods("GET")
+	router.HandleFunc("/places/{id:[0-9]+}", ph.UpdatePlaceByID).Methods("PUT")
+	router.HandleFunc("/places/{id:[0-9]+}", ph.DeletePlaceByID).Methods("DELETE")
+	router.HandleFunc("/places/search", ph.SearchPlaces).Methods("POST")
+
 	router.PathPrefix("/assets/").Handler(handlers.NewStaticHandler(wwwroot, "assets"))
 
 	router.NotFoundHandler = handlers.NewNotFoundHandler()

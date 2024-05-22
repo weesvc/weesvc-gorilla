@@ -10,6 +10,8 @@ templ Layout(content templ.Component) {
         <title>WeeSVC - A Tiny Server</title>
         <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet" />
         <script src="/assets/dist/js/bootstrap.min.js"></script>
+        <script src="/assets/htmx.min.js"></script>
+        <link href="/assets/wee-stylee.css" rel="stylesheet" />
 	</head>
 	<body>
         @navbar()
@@ -33,9 +35,6 @@ templ navbar() {
                 <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
                 <li class="nav-item"><a href="/places" class="nav-link">Places</a></li>
             </ul>
-            <form class="ui-widget" role="search">
-                <input id="search" class="form-control ui-autocomplete-input" autocomplete="off" type="search" placeholder="Search" aria-label="Search" />
-            </form>
         </div>
     </div>
 </nav>

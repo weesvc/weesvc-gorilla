@@ -9,6 +9,11 @@ func (ctx *Context) GetPlaces() ([]*model.Place, error) {
 	return ctx.Database.GetPlaces()
 }
 
+// SearchPlaces returns available places.
+func (ctx *Context) SearchPlaces(s string) ([]*model.Place, error) {
+	return ctx.Database.SearchPlaces(s)
+}
+
 // GetPlaceByID returns the place specified by the provided identifier.
 func (ctx *Context) GetPlaceByID(id uint) (*model.Place, error) {
 	place, err := ctx.Database.GetPlaceByID(id)

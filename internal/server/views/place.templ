@@ -1,0 +1,47 @@
+package views
+
+import "fmt"
+import "github.com/weesvc/weesvc-gorilla/internal/model"
+
+templ PlaceDetailsPage(place *model.Place) {
+    <h2 class="display-4">{ place.Name }</h2>
+    <div class="card-text">
+        @PlaceDetails(place)
+    </div>
+}
+
+
+templ PlaceDetails(place *model.Place) {
+    <div hx-target="this" hx-swap="outerHTML">
+        <div><label>Name</label>: { place.Name }</div>
+        <div><label>Description</label>: { place.Description }</div>
+        <div><label>Latitude</label>: { fmt.Sprintf("%f", place.Latitude) }</div>
+        <div><label>Latitude</label>: { fmt.Sprintf("%f", place.Longitude) }</div>
+        <button hx-get={ fmt.Sprintf("/places/%d/edit", place.ID) } class="btn btn-primary">
+            Click to Edit
+        </button>
+    </div>
+}
+
+templ PlaceEditor(place *model.Place) {
+    <form hx-put={ fmt.Sprintf("/places/%d", place.ID) } hx-target="this" hx-swap="outerHTML">
+      <div>
+        <label>Name</label>
+        <input type="text" name="name" value={ place.Name }>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" name="description" value={ place.Description }>
+      </div>
+      <div class="form-group">
+        <label>Latitude</label>
+        <input type="text" name="latitude" value={ fmt.Sprintf("%f", place.Latitude) }>
+      </div>
+      <div class="form-group">
+        <label>Latitude</label>
+        <input type="text" name="longitude" value={ fmt.Sprintf("%f", place.Longitude) }>
+      </div>
+      <button class="btn btn-primary">Submit</button>
+      <button class="btn btn-primary" hx-get={ fmt.Sprintf("/places/%d/cancel", place.ID) } hx-swap="outerHTML">Cancel</button>
+    </form>
+}
