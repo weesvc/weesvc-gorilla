@@ -13,14 +13,13 @@ The following external libraries were *directly* utilized in this project.
 | Postgres    | https://www.postgresql.org/            | An advanced opensource relational database                              |
 | Cobra       | https://github.com/spf13/cobra         | Command-line library                                                    |
 | Viper       | https://github.com/spf13/viper         | Awesome configuration library for settings                              |
-| Logrus      | https://github.com/sirupsen/logrus     | Logging abstraction for the Go standard library                         |
 | UUID        | https://github.com/google/uuid         | Implementation for generation of universally unique identifiers (UUIDs) |
 
 ## Build
 Builds are performed using the `Makefile` provided in the project root.
 
 #### CLI
-In order to build the CLI, you will need to have Go (1.21+) installed on your system.
+In order to build the CLI, you will need to have Go (1.22+) installed on your system.
 
 The default target for the `Makefile` will perform several tasks: 
 * organize imports using `goimports`
@@ -35,6 +34,9 @@ Once built using `make`, you can **migrate** the database scripts and run the ap
 ```shell script
 bin/weesvc migrate; bin/weesvc serve
 ```
+
+Once started, you can even access the new user interface via http://localhost:9092/.
+
 #### Docker
 For those who do not have Go available, [Docker](https://hub.docker.com/) is an option to build the application and run the application within a container.
 Using the `make build-docker` command will build the application within a Linux container, then copy the resulting binary into a slim docker image to utilize for execution.
@@ -147,3 +149,11 @@ To be a valid service, the following command MUST pass at 100%:
 ```shell script
 k6 run -e PORT=9092 https://raw.githubusercontent.com/weesvc/workbench/main/scripts/api-compliance.js
 ```
+
+## User Interface Development
+To experiment with Templ and HTMX, we incorporated a user interface into this implementation.
+
+In order to work on the UI, run the `make develop` target to start the server in "live reload"-mode.
+
+If you'd like to hear more about this addition, check out the presentation about it:
+[![Building Web Apps Using Go](https://i.ytimg.com/vi/L1D9zJ-Yn9U/maxresdefault.jpg)](https://www.youtube.com/watch?v=L1D9zJ-Yn9U)
