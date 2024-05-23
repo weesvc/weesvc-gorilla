@@ -31,7 +31,6 @@ var wwwroot embed.FS
 func StartServer(config *config.Config) {
 	router := mux.NewRouter()
 
-	//router.Use(corsMiddleware)
 	router.Use(mux.CORSMethodMiddleware(router))
 	router.Use(recoveryMiddleware)
 
@@ -49,7 +48,7 @@ func StartServer(config *config.Config) {
 
 	ph := handlers.NewPlacesHandler(svc)
 	router.HandleFunc("/places", ph.GetPlaces).Methods("GET")
-	//router.HandleFunc("/places", ph.CreatePlace).Methods("POST")
+	// TODO router.HandleFunc("/places", ph.CreatePlace).Methods("POST")
 	router.HandleFunc("/places/{id:[0-9]+}", ph.GetPlaceByID).Methods("GET")
 	router.HandleFunc("/places/{id:[0-9]+}/edit", ph.GetPlaceEditor).Methods("GET")
 	router.HandleFunc("/places/{id:[0-9]+}/cancel", ph.GetPlaceDetails).Methods("GET")
@@ -57,7 +56,7 @@ func StartServer(config *config.Config) {
 	router.HandleFunc("/places/{id:[0-9]+}", ph.DeletePlaceByID).Methods("DELETE")
 	router.HandleFunc("/places/search", ph.SearchPlaces).Methods("POST")
 
-	router.PathPrefix("/assets/").Handler(handlers.NewStaticHandler(wwwroot, "assets"))
+	router.PathPrefix("/assets/").Handler(handlers.NewStaticHandler(config, wwwroot, "assets"))
 
 	router.NotFoundHandler = handlers.NewNotFoundHandler()
 
@@ -89,6 +88,7 @@ func StartServer(config *config.Config) {
 
 	if err := s.Shutdown(ctx); err != nil {
 		slog.Error("error shutting down", slog.Any("err", err))
+		//nolint:gocritic
 		os.Exit(1)
 	}
 }
@@ -96,16 +96,6 @@ func StartServer(config *config.Config) {
 func recoveryMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gorilla.RecoveryHandler(gorilla.PrintRecoveryStack(true))
-		next.ServeHTTP(w, r)
-	})
-}
-
-func corsMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gorilla.CORS(
-			gorilla.AllowedOrigins([]string{"*", ""}),
-			gorilla.AllowedMethods([]string{"GET", "HEAD", "POST", "OPTIONS"}),
-		)
 		next.ServeHTTP(w, r)
 	})
 }

@@ -1,8 +1,9 @@
 package db
 
 import (
-	"github.com/pkg/errors"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/weesvc/weesvc-gorilla/internal/model"
 )

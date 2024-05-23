@@ -1,12 +1,13 @@
 package handlers
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/a-h/templ"
 	"github.com/gorilla/mux"
 	"github.com/weesvc/weesvc-gorilla/internal/app"
 	"github.com/weesvc/weesvc-gorilla/internal/server/views"
-	"net/http"
-	"strconv"
 )
 
 type PlacesHandler struct {
