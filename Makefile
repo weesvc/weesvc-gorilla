@@ -20,7 +20,7 @@ DOCKER_IMAGE := $(PROJECT_MODULE)
 DOCKER_TAG := $(BUILD_VERSION)
 
 # Linker Flags
-LINKER_FLAGS := "-X $(PROJECT_MODULE)/env.Version=$(BUILD_VERSION) -X $(PROJECT_MODULE)/env.Revision=$(BUILD_REVISION)"
+LINKER_FLAGS := "-X $(PROJECT_MODULE)/internal/env.Version=$(BUILD_VERSION) -X $(PROJECT_MODULE)/internal/env.Revision=$(BUILD_REVISION)"
 
 
 all: imports fmt vet build
@@ -58,8 +58,8 @@ test:
 
 ## imports: Organizes imports within the codebase.
 imports:
-	echo "Organizing imports..."
-	goimports -w -l --local $(BASE_MODULE) .
+	echo "[SKIPPING] Organizing imports..."
+#	goimports -w -l --local $(BASE_MODULE) .
 
 ## fmt: Applies appropriate formatting on the codebase.
 fmt:
@@ -76,7 +76,6 @@ setup:
 	echo "Installing tools..."
 	go install golang.org/x/tools/cmd/goimports@latest
 
-
 ## build: Build the application.
 build: deps imports fmt vet build-only
 
@@ -84,6 +83,8 @@ build: deps imports fmt vet build-only
 build-only:
 	echo "Building '${PROJECT_NAME}'..."
 	mkdir -v -p $(CURDIR)/bin
+	go install github.com/a-h/templ/cmd/templ@latest
+	templ generate .
 	go build -v \
 	   -ldflags $(LINKER_FLAGS) \
 	   -o "bin/$(PROJECT_NAME)" .
@@ -91,6 +92,8 @@ build-only:
 ## build-all: Builds all architectures of the application.
 build-all: deps imports fmt vet
 	mkdir -v -p $(CURDIR)/artifacts
+	go install github.com/a-h/templ/cmd/templ@latest
+	templ generate .
 	gox -verbose \
 	    -os "$(BUILD_OS)" -arch "$(BUILD_ARCH)" \
 	    -ldflags $(LINKER_FLAGS) \
@@ -107,8 +110,14 @@ build-docker:
 release-docker: build-docker
 	docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+## develop: Start the application in hot-reload mode.
+develop: build-only
+	go install github.com/cosmtrek/air@latest
+	templ generate --watch --proxy=http://localhost:9092 &
+	air -c ./.air.toml -- serve -c config-postgres.yaml --server-port=9092 --resource-caching-enabled=false
+
 
 .PHONY: build build-all \
         clean clean-all clean-artifacts \
-        deps fmt help imports \
+        deps develop fmt help imports \
         setup test vet

@@ -20,7 +20,7 @@ func TestDatabase_GetPlaces(t *testing.T) {
 
 	places, err := placeDB.GetPlaces()
 	assert.NoError(t, err)
-	assert.Equal(t, 10, len(places))
+	assert.Equal(t, 20, len(places))
 }
 
 func TestDatabase_GetPlaceByID(t *testing.T) {
@@ -45,7 +45,7 @@ func TestDatabase_CreatePlace(t *testing.T) {
 	placeDB := setupDatabase(t)
 
 	newPlace := &model.Place{
-		ID:          20,
+		ID:          9999,
 		Name:        "Kerid Crater",
 		Description: "Kerid Crater, Iceland",
 		Latitude:    64.04126,

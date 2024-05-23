@@ -1,6 +1,8 @@
 package db
 
 import (
+	"strings"
+
 	"github.com/pkg/errors"
 
 	"github.com/weesvc/weesvc-gorilla/internal/model"
@@ -31,4 +33,13 @@ func (db *Database) UpdatePlace(place *model.Place) error {
 // DeletePlaceByID removes a single place from the database given its identifier.
 func (db *Database) DeletePlaceByID(id uint) error {
 	return errors.Wrap(db.Delete(&model.Place{}, id).Error, "unable to delete place")
+}
+
+func (db *Database) SearchPlaces(s string) ([]*model.Place, error) {
+	var places []*model.Place
+	s = strings.ToLower(s)
+	return places, errors.Wrap(
+		db.Where("LOWER(name) LIKE ? OR LOWER(description) LIKE ?",
+			"%"+s+"%", "%"+s+"%").Limit(10).Find(&places).Error,
+		"unable to find places")
 }

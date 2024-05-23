@@ -14,6 +14,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.22.x
+      - name: Generate templates and build binary
+        run: |
+          make build-only
       - name: Check module dependencies
         run: |
           go version
@@ -31,6 +34,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: 1.22.x
+      - name: Generate templates and build binary
+        run: |
+          make build-only
       - name: Retrieve golangci-lint version
         run: |
           echo "Version=$(head -n 1 "${GITHUB_WORKSPACE}/.golangci.yml" | tr -d '# ')" >> $GITHUB_OUTPUT

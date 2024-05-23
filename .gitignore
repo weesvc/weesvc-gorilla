@@ -27,4 +27,7 @@
 # Ignore other project items
 artifacts/
 bin/
+tmp/
 gorm.db
+*_templ.go
+*_templ.txt

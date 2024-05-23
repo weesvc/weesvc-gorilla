@@ -1,0 +1,4 @@
+DatabaseURI: "postgres://postgres:postgres@localhost:5432/weesvc?sslmode=disable"
+# Specify dialect as "postgres" or "sqlite3". "sqlite3" is default.
+Dialect: postgres
+Verbose: false

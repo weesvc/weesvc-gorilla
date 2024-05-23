@@ -1,0 +1,41 @@
+package views
+
+// Layout provides the primary display of the page.
+templ Layout(content templ.Component) {
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>WeeSVC - A Tiny Server</title>
+        <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="/assets/dist/js/bootstrap.min.js"></script>
+        <script src="/assets/htmx.min.js"></script>
+        <link href="/assets/wee-stylee.css" rel="stylesheet" />
+	</head>
+	<body>
+        @navbar()
+        @content
+    </body>
+</html>
+}
+
+templ navbar() {
+<nav class="navbar sticky-top navbar-expand-lg bg-dark" aria-label="Navigation bar" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <img class="bi me-2" width="40" height="40" src="/assets/images/cloudgnome-avatar.png" />
+            <span class="fs-4">WeeSVC Dashboard</span>
+        </a>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbar">
+            <ul class="navbar-nav ms-auto mb-0 pe-4">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/places" class="nav-link">Places</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+}
